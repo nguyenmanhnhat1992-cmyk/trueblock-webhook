@@ -1,5 +1,6 @@
 from flask import Flask, request
 import requests
+import json
 
 app = Flask(__name__)
 
@@ -9,8 +10,11 @@ CHAT_ID = "-1003385973024"
 @app.route("/webhook", methods=["POST"])
 def webhook():
     try:
-        data = request.json
-        print("DATA RECEIVED:", data, flush=True)
+        raw_data = request.get_data(as_text=True)
+        print("RAW DATA:", raw_data, flush=True)
+
+        data = json.loads(raw_data)
+        print("JSON DATA:", data, flush=True)
 
         message = data.get("comment")
         if not message:
